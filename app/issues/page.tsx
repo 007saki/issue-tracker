@@ -6,6 +6,7 @@ import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from './_component/IssueStatusBadge'
+import CustomLink from '../components/CustomLink'
 
 const IssuesPage = () => {
 
@@ -26,7 +27,7 @@ const IssuesPage = () => {
             {issues.map(issue=>
             <Table.Row key={issue.id}>
               <Table.Cell>
-                <div>{issue.title}</div>
+                <div><CustomLink href={`/issues/${issue.id}`} label={issue.title}/></div>
                 <div className='gap-5 flex md:hidden'>
                   <div><IssueStatusBadge status={issue.status}/></div>
                   <div>{issue.createdAt.toDateString()}</div>
