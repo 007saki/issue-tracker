@@ -7,14 +7,15 @@ import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from './_component/IssueStatusBadge'
 import CustomLink from '../components/CustomLink'
+import delay from 'delay'
 
-const IssuesPage = () => {
-
+const IssuesPage = async() => {
+  await delay(250)
 
   const IssueTable=async()=>{
     const issues = await prisma.issue.findMany()
     return(
-      <div>
+      <div className='max-w-lg'>
         <Table.Root variant='surface'>
           <Table.Header>
             <Table.Row>

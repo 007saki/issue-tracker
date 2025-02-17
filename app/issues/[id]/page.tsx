@@ -7,10 +7,12 @@ import Markdown from 'react-markdown'
 import IssueDeleteButton from '../_component/IssueDeleteButton'
 import IssueStatusBadge from '../_component/IssueStatusBadge'
 import { BiEdit } from 'react-icons/bi'
+import delay from 'delay'
 
 
 const IssueDetailsPage =async ({params}:{params:Promise<{id:string}>}) => {
     const id = (await params).id
+    await delay(2000)
     
     const issues = await prisma.issue.findUnique({
         where:{id: parseInt(id)}
