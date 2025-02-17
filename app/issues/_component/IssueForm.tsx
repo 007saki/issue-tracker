@@ -31,7 +31,7 @@ const IssueForm = () => {
         {error&&<CallOut label={error} color='red'/>}
         <form onSubmit={handleSubmit(async(data)=>{
             try {
-                await axios.post('/api/issues1',data)
+                await axios.post('/api/issues',data)
                 router.push('/issues')
             } catch (error) {
                 setError(`${error}`)

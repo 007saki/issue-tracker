@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
+import '@tailwindcss/typography'
 import Navbar from "./Navbar";
 import { Theme } from "@radix-ui/themes";
 
