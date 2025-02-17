@@ -7,7 +7,7 @@ import ErrorMessage from '@/app/components/ErrorMessage';
 import { issueSchema } from '@/app/issueSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Issue } from '@prisma/client';
-import { Button, TextField } from '@radix-ui/themes';
+import { Button, Spinner, TextField } from '@radix-ui/themes';
 import axios from 'axios';
 import "easymde/dist/easymde.min.css";
 import dynamic from 'next/dynamic';
@@ -21,6 +21,7 @@ const SimpleMDE = dynamic(()=>import('react-simplemde-editor'),{ssr:false})
     type IssueForm = z.infer<typeof issueSchema>
 
 const IssueForm = ({issue}:{issue?:Issue}) => {
+    const [isload, setIsload] = useState(false)
 
     const {register,control, handleSubmit,formState:{errors}} = useForm<IssueForm>({
         resolver: zodResolver(issueSchema)
@@ -30,15 +31,18 @@ const IssueForm = ({issue}:{issue?:Issue}) => {
 
     const onSubmitIssue=handleSubmit(async(data)=>{
         if(issue){
+            setIsload(true)
             await axios.patch(`/api/issues/${issue.id}`,data)
             router.push('/issues')
         }
         else
         try {
+            setIsload(true)
             await axios.post('/api/issues',data)
             router.push('/issues')
         } catch (error) {
             setError(`${error}`)
+            setIsload(false)
         }
     })
     
@@ -60,7 +64,7 @@ const IssueForm = ({issue}:{issue?:Issue}) => {
             />
             {errors&&<ErrorMessage error={errors.description?.message}/>}
 
-            <Button>{issue?'Update Issue':'Add New Issue'}</Button>
+            <Button>{isload &&<Spinner/>} {issue?'Update Issue':'Add New Issue'}</Button>
         </form>
     </div>
   )
