@@ -9,31 +9,17 @@ import { FaBug } from 'react-icons/fa'
 
 const Navbar = () => {
   const{status, data:session}=useSession()
+
   const currentPath = usePathname()
   const links = [
     {href:'/', label:'Dashboard'},
     {href:'/issues', label:'Issues'},
   ]
 
-  return (
-    <nav className={'flex gap-5 px-5 items-center h-10 border-b mb-5 justify-between'}>
-        <Box className='flex gap-5 items-center'>
-          <Link href={'/'}><FaBug color='purple'/></Link>
-          {links.map(link=>
-            <ul key={link.href}>
-              <li><Link
-              className={classNames({
-                'text-zinc-900':currentPath===link.href,
-                'text-zinc-500':currentPath!==link.href,
-                'transition-colors':true,
-                'hover:text-zinc-900':true,
-              })}
-              href={link.href}>{link.label}</Link></li>
-            </ul>
-          )}
-        </Box>
-        <Box className='px-10'>
-          {status==='authenticated'&&
+  const Login=()=>{
+    return (
+      <Box className='px-10'>
+        {status==='authenticated'&&
           <DropdownMenu.Root >
             <DropdownMenu.Trigger>
             <Avatar referrerPolicy='no-referrer' className='hover:cursor-pointer' fallback='?' src={session.user!.image!} size={'3'} radius='full'/>
@@ -49,7 +35,34 @@ const Navbar = () => {
           </DropdownMenu.Root>
           }
           {status==='unauthenticated'&&<Link href={'/api/auth/signin'}>Login</Link>}
-        </Box>
+      </Box>
+    )
+  }
+
+  const LinksComponent=()=>{
+    return(
+        <Box className='flex gap-5 items-center'>
+              <Link href={'/'}><FaBug color='purple'/></Link>
+              {links.map(link=>
+                <ul key={link.href}>
+                  <li><Link
+                  className={classNames({
+                    'text-zinc-900':currentPath===link.href,
+                    'text-zinc-500':currentPath!==link.href,
+                    'transition-colors':true,
+                    'hover:text-zinc-900':true,
+                  })}
+                  href={link.href}>{link.label}</Link></li>
+                </ul>
+              )}
+            </Box>
+      )
+  }
+
+  return (
+    <nav className={'flex gap-5 px-5 items-center h-10 border-b mb-5 justify-between'}>
+        <LinksComponent/>
+        <Login/>
 
     </nav>
   )

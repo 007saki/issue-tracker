@@ -7,13 +7,14 @@ import Markdown from 'react-markdown'
 import IssueDeleteButton from '../_component/IssueDeleteButton'
 import IssueStatusBadge from '../_component/IssueStatusBadge'
 import { BiEdit } from 'react-icons/bi'
-import delay from 'delay'
+import { getServerSession } from 'next-auth'
+import authOptions from '@/app/api/auth/AuthOptions'
 
 
 const IssueDetailsPage =async ({params}:{params:Promise<{id:string}>}) => {
     const id = (await params).id
-    await delay(250)
-    
+      const session = await  getServerSession(authOptions)
+
     const issues = await prisma.issue.findUnique({
         where:{id: parseInt(id)}
     })
@@ -34,10 +35,12 @@ const IssueDetailsPage =async ({params}:{params:Promise<{id:string}>}) => {
                 </Markdown>
             </Card>
         </div>
-        <div className='gap-5 flex flex-col'>
-            <IssueButtonLink icon={<BiEdit/>} href={`/issues/edit/${issues.id}`} label='Edit Issue' />
-            <IssueDeleteButton id={issues.id}/>
-        </div>
+        {session &&
+            (<div className='gap-5 flex flex-col'>
+                <IssueButtonLink icon={<BiEdit/>} href={`/issues/edit/${issues.id}`} label='Edit Issue' />
+                <IssueDeleteButton id={issues.id}/>
+            </div>)
+        }
     </div>
   )
 }
