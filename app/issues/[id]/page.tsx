@@ -9,6 +9,7 @@ import IssueStatusBadge from '../_component/IssueStatusBadge'
 import { BiEdit } from 'react-icons/bi'
 import { getServerSession } from 'next-auth'
 import authOptions from '@/app/api/auth/AuthOptions'
+import AssigneeSelect from './AssigneeSelect'
 
 
 const IssueDetailsPage =async ({params}:{params:Promise<{id:string}>}) => {
@@ -37,6 +38,7 @@ const IssueDetailsPage =async ({params}:{params:Promise<{id:string}>}) => {
         </div>
         {session &&
             (<div className='gap-5 flex flex-col'>
+                <AssigneeSelect/>
                 <IssueButtonLink icon={<BiEdit/>} href={`/issues/edit/${issues.id}`} label='Edit Issue' />
                 <IssueDeleteButton id={issues.id}/>
             </div>)
