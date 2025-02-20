@@ -1,25 +1,37 @@
 
 
 'use client'
-import { Button, DropdownMenu } from '@radix-ui/themes'
-import { useSession } from 'next-auth/react'
-import React from 'react'
-import { MdOutlineArrowDropDownCircle } from 'react-icons/md'
+import { User } from '@prisma/client'
+import { Select } from '@radix-ui/themes'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 const AssigneeSelect = () => {
-    const {data:session} = useSession()
+    const [users, setUsers] = useState<User[]>([])
+
+    useEffect(()=>{
+        const getUser=async()=>{
+            const {data} = await axios.get<User[]>('/api/users')
+            setUsers(data)
+        }
+        getUser();
+    },[])
+
   return (
     <div>
-        <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-                <Button variant='soft'> <MdOutlineArrowDropDownCircle />Assign User</Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-                <DropdownMenu.Item>
-                    {session?.user?.name}
-                </DropdownMenu.Item>
-            </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <Select.Root>
+            <Select.Trigger placeholder='Assign...'/>
+            <Select.Content>
+                <Select.Group>
+                    <Select.Label>Users</Select.Label>
+                    {users.map(user=>
+                        <Select.Item key={user.id} value={user.id}>
+                            {user.name}
+                            </Select.Item>
+                    )}
+                </Select.Group>
+            </Select.Content>
+        </Select.Root>
     </div>
   )
 }
