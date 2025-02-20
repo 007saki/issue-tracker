@@ -6,6 +6,7 @@ import '@tailwindcss/typography'
 import Navbar from "./Navbar";
 import { Theme } from "@radix-ui/themes";
 import AuthProvider from "./auth/Providers";
+import QueryClientProvider from "./QueryClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-            <Theme>
-              <Navbar/>
-              <main className="px-5">{children}</main>
-            </Theme>
-          </AuthProvider>
+        <QueryClientProvider>
+          <AuthProvider>
+              <Theme>
+                <Navbar/>
+                <main className="px-5">{children}</main>
+              </Theme>
+            </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
